@@ -49,19 +49,3 @@ y_pred = classifier.predict(X_test)
 confusion_matrix = confusion_matrix(y_test,y_pred)
 print(confusion_matrix)
 print(classifier.score(X_test, y_test))
-
-
-
-
-# Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
-
-
-
-
-
-classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
-accuracies = cross_val_score(estimator=classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
