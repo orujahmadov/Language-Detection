@@ -10,9 +10,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from nltk import ngrams
 import csv
+from sklearn.model_selection import cross_val_score
 
-
-all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż']
+all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡']
 
 # PART 1 -> DATA PREPROCESSING
 
@@ -65,7 +65,7 @@ def export_kaggle_results(file_name, header1_name, header2_name, results):
     with open(file_name, 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        filewriter.writerow([header1_name, header1_name])
+        filewriter.writerow([header1_name, header2_name])
         index = 0
         for result in results:
             filewriter.writerow([index,result])
@@ -87,7 +87,7 @@ cleaned_data = clean_data(X.tolist(), Y.tolist())
 cleaned_X = cleaned_data[0]
 cleaned_Y = cleaned_data[1]
 
-export_cleaned_data("cleaned50.csv", 'X','Y', cleaned_X, cleaned_Y)
+export_cleaned_data("cleaned25.csv", 'X','Y', cleaned_X, cleaned_Y)
 
 input_features = extract_features(cleaned_X)
 X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0)
@@ -111,4 +111,4 @@ test_features = extract_features(test_X.tolist())
 test_features = sc.fit_transform(test_features)
 y_test_results = classifier.predict(test_features)
 
-export_kaggle_results("kaggle50_csv", 'Id','Category', y_test_results)
+export_kaggle_results("kaggle91.csv", 'Id','Category', y_test_results)
