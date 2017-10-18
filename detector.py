@@ -1,18 +1,16 @@
+# -*- coding: utf-8 -*-
 # Classification template
 
 # Importing the libraries
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
-from nltk import ngrams
 import csv
-from sklearn.model_selection import cross_val_score
+import sys
 
-all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡']
+all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
 # PART 1 -> DATA PREPROCESSING
 
@@ -71,44 +69,55 @@ def export_kaggle_results(file_name, header1_name, header2_name, results):
             filewriter.writerow([index,result])
             index+=1
 
-def export_cleaned_data(file_name, header1_name, header2_name, clean_x, clean_y):
+def export_cleaned_data(file_name, clean_x, clean_y):
     with open(file_name, 'wb') as csvfile:
-        filewriter = csv.writer(csvfile, delimiter=',',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        filewriter.writerow([header1_name, header2_name])
+        filewriter = csv.writer(csvfile, delimiter=',')
         index = 0
         for x,y in zip(clean_x, clean_y):
             filewriter.writerow([x,y])
             index+=1
 
-# Clean data 
-cleaned_data = clean_data(X.tolist(), Y.tolist())
-
-cleaned_X = cleaned_data[0]
-cleaned_Y = cleaned_data[1]
-
-export_cleaned_data("cleaned25.csv", 'X','Y', cleaned_X, cleaned_Y)
-
-input_features = extract_features(cleaned_X)
-X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0)
-
-# Feature Scaling
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.fit_transform(X_test)
-
-# PART 2 -> TRAINING
-classifier = LogisticRegression(random_state=0)
-classifier.fit(X_train,y_train)
+def helper_function(input_x):
+    other_chars = []
+    for string in input_x:
+        if isinstance(string, basestring):
+            for char in string.lower():
+                if char not in all_characters and str(char).isdigit() is False and char not in other_chars:
+                    other_chars.append(char)
+        else:
+            if string not in other_chars:
+                other_chars.append(string)
+    return other_chars
 
 
-print(classifier.score(X_test, y_test))
-
-
-testset_x = pd.read_csv("data/test_set_x.csv")
-test_X = testset_x.iloc[:,1]
-test_features = extract_features(test_X.tolist())
-test_features = sc.fit_transform(test_features)
-y_test_results = classifier.predict(test_features)
-
-export_kaggle_results("kaggle91.csv", 'Id','Category', y_test_results)
+if __name__ == "__main__":
+    
+    cleaned_data = clean_data(X,Y)
+    
+    cleaned_X = cleaned_data[0]
+    cleaned_Y = cleaned_data[1]
+    
+    input_features = extract_features(cleaned_X)
+    
+    X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0, test_size=0.01)
+    
+    # Feature Scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.fit_transform(X_test)
+    
+    # PART 2 -> TRAINING
+    classifier = LogisticRegression(random_state=0)
+    classifier.fit(X_train,y_train)
+    
+    print("Clasifier score is " + str(classifier.score(X_test, y_test)))
+    
+    if (len(sys.argv) > 1):
+        testset_x = pd.read_csv("data/test_set_x.csv")
+        test_X = testset_x.iloc[:,1]
+        test_features = extract_features(test_X.tolist())
+        test_features = sc.fit_transform(test_features)
+        y_test_results = classifier.predict(test_features)
+        
+        export_kaggle_results('kaggle/' + sys.argv[1], 'Id','Category', y_test_results)
+    
