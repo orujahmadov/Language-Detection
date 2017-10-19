@@ -5,7 +5,6 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import csv
@@ -107,18 +106,19 @@ if __name__ == "__main__":
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
+    from sklearn.ensemble import RandomForestClassifier
     # PART 2 -> TRAINING
     classifier = RandomForestClassifier(max_depth=46)
     classifier.fit(X_train,y_train)
     
-    print("Clasifier score is " + str(classifier.score(X_test, y_test)))   
-    
-    if (len(sys.argv) > 1):
-        testset_x = pd.read_csv("data/test_set_x.csv")
-        test_X = testset_x.iloc[:,1]
-        test_features = extract_features(test_X.tolist())
-        test_features = sc.fit_transform(test_features)
-        y_test_results = classifier.predict(test_features)
+    print("Clasifier score is " + str(classifier.score(X_test, y_test)))
+
+    testset_x = pd.read_csv("data/test_set_x.csv")
+    test_X = testset_x.iloc[:,1]
+    test_features = extract_features(test_X.tolist())
+    test_features = sc.fit_transform(test_features)
+    y_test_results = classifier.predict(test_features)
         
-        export_kaggle_results('kaggle/' + sys.argv[1], 'Id','Category', y_test_results)
+    export_kaggle_results('kaggle_forest92.csv', 'Id','Category', y_test_results)    
+    
     
