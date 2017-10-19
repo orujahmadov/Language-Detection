@@ -108,7 +108,7 @@ if __name__ == "__main__":
     
     from sklearn.svm import SVC
     # PART 2 -> TRAINING
-    classifier = SVC(kernel="poly", max_iter=1000)
+    classifier = SVC(kernel="poly")
     classifier.fit(X_train,y_train)
     
     print("Clasifier score is " + str(classifier.score(X_test, y_test)))  
