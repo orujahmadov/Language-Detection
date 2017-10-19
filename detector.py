@@ -99,7 +99,7 @@ if __name__ == "__main__":
     
     input_features = extract_features(cleaned_X)
     
-    X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0, test_size=0.1)
+    X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0, test_size=0.2)
     
     # Feature Scaling
     sc = StandardScaler()
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     
     from sklearn.svm import SVC
     # PART 2 -> TRAINING
-    classifier = SVC(kernel='poly', C=1e3, degree=2)
+    classifier = SVC(kernel="poly", max_iter=1000)
     classifier.fit(X_train,y_train)
     
     print("Clasifier score is " + str(classifier.score(X_test, y_test)))  
