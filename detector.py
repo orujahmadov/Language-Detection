@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import csv
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     
     input_features = extract_features(cleaned_X)
     
-    X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0, test_size=0.01)
+    X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0, test_size=0.1)
     
     # Feature Scaling
     sc = StandardScaler()
@@ -107,10 +108,10 @@ if __name__ == "__main__":
     X_test = sc.fit_transform(X_test)
     
     # PART 2 -> TRAINING
-    classifier = LogisticRegression(random_state=0)
+    classifier = RandomForestClassifier(max_depth=46)
     classifier.fit(X_train,y_train)
     
-    print("Clasifier score is " + str(classifier.score(X_test, y_test)))
+    print("Clasifier score is " + str(classifier.score(X_test, y_test)))   
     
     if (len(sys.argv) > 1):
         testset_x = pd.read_csv("data/test_set_x.csv")
