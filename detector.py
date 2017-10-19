@@ -33,7 +33,7 @@ def clean_data(input_x, y):
     cleaned_labels = []
     cleaned_data = []
     for input_feature, label in zip(input_x, y):
-        if isinstance(input_feature, basestring):
+        if isinstance(input_feature, str):
             if (get_letters_count(input_feature) > 40 and get_letters_count(input_feature) < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
@@ -53,7 +53,7 @@ def get_letters_frequency(input_string):
 def extract_features(input_data):
     features_array = []
     for string in input_data:
-        if isinstance(string, basestring):
+        if isinstance(string, str):
             features_array.append(get_letters_frequency(string))
         else:
             features_array.append(get_letters_frequency(" "))
@@ -80,7 +80,7 @@ def export_cleaned_data(file_name, clean_x, clean_y):
 def helper_function(input_x):
     other_chars = []
     for string in input_x:
-        if isinstance(string, basestring):
+        if isinstance(string, str):
             for char in string.lower():
                 if char not in all_characters and str(char).isdigit() is False and char not in other_chars:
                     other_chars.append(char)
@@ -106,19 +106,11 @@ if __name__ == "__main__":
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
-    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.svm import SVC
     # PART 2 -> TRAINING
-    classifier = RandomForestClassifier(max_depth=46)
+    classifier = SVC(kernel='poly', C=1e3, degree=2)
     classifier.fit(X_train,y_train)
     
-    print("Clasifier score is " + str(classifier.score(X_test, y_test)))
-
-    testset_x = pd.read_csv("data/test_set_x.csv")
-    test_X = testset_x.iloc[:,1]
-    test_features = extract_features(test_X.tolist())
-    test_features = sc.fit_transform(test_features)
-    y_test_results = classifier.predict(test_features)
-        
-    export_kaggle_results('kaggle_forest92.csv', 'Id','Category', y_test_results)    
+    print("Clasifier score is " + str(classifier.score(X_test, y_test)))  
     
     
