@@ -9,16 +9,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import csv
 import sys
+from ast import literal_eval
+import pickle
 
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
-# PART 1 -> DATA PREPROCESSING
-
-# Importing the dataset
-dataset_x = pd.read_csv("data/train_set_x.csv")
-X = dataset_x.iloc[:,1]
-dataset_y = pd.read_csv('data/train_set_y.csv')
-Y = dataset_y.iloc[:,1]
 
 def get_letters_count(string):
     counter = 0
@@ -89,27 +84,66 @@ def helper_function(input_x):
                 other_chars.append(string)
     return other_chars
 
-
-if __name__ == "__main__":
+def preprocess_data(file_train_x, file_train_y):
+    # Importing the dataset
+    dataset_x = pd.read_csv("data/train_set_x.csv")
+    X = dataset_x.iloc[:,1]
+    dataset_y = pd.read_csv('data/train_set_y.csv')
+    Y = dataset_y.iloc[:,1]
     
     cleaned_data = clean_data(X,Y)
     
     cleaned_X = cleaned_data[0]
     cleaned_Y = cleaned_data[1]
     
-    input_features = extract_features(cleaned_X)
+    extracted_features = extract_features(cleaned_X)
     
-    X_train, X_test, y_train, y_test = train_test_split(input_features, cleaned_Y, random_state=0, test_size=0.1)
+    preprocessed_data = {}
+    preprocessed_data['X'] = extracted_features
+    preprocessed_data['Y'] = cleaned_Y
+    
+    return preprocessed_data
+
+def import_preprocessed_data(file_preprocessed_data):
+    preprocessed_data = pd.read_csv(file_preprocessed_data)
+    preprocessed_data.X = preprocessed_data.X.apply(literal_eval)
+    X = preprocessed_data.iloc[:,0]
+    Y = preprocessed_data.iloc[:,1]
+    X = X.tolist()
+    Y= Y.tolist()
+    
+    data = {}
+    data['X'] = X
+    data['Y'] = Y
+    
+    return data
+    
+if __name__ == "__main__":
+    
+    model_name = ""
+    output_kaggle = ""
+    
+    if (len(sys.argv) > 2):
+        model_name = sys.argv[1]
+        output_kaggle = sys.argv[2]
+    
+    # PART 1 -> DATA PREPROCESSING
+    data = import_preprocessed_data("cleaned/cleaned_data_final.csv")
+    X = data['X']
+    Y = data['Y']
+    
+    # Splitting data to train set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
     
     # Feature Scaling
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
-    from sklearn.ensemble import RandomForestClassifier
     # PART 2 -> TRAINING
-    classifier = RandomForestClassifier(max_depth=46)
+    classifier = LogisticRegression(random_state=0)
     classifier.fit(X_train,y_train)
+    pickle.dump(classifier, open('models/' + model_name, 'wb'))
     
     print("Clasifier score is " + str(classifier.score(X_test, y_test)))
 
@@ -119,6 +153,6 @@ if __name__ == "__main__":
     test_features = sc.fit_transform(test_features)
     y_test_results = classifier.predict(test_features)
         
-    export_kaggle_results('kaggle_forest92.csv', 'Id','Category', y_test_results)    
+    export_kaggle_results('kaggle/' + output_kaggle, 'Id','Category', y_test_results)    
     
     
