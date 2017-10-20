@@ -28,7 +28,7 @@ def clean_data(input_x, y):
     cleaned_labels = []
     cleaned_data = []
     for input_feature, label in zip(input_x, y):
-        if isinstance(input_feature, basestring):
+        if isinstance(input_feature, str):
             if (get_letters_count(input_feature) > 40 and get_letters_count(input_feature) < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
@@ -48,7 +48,7 @@ def get_letters_frequency(input_string):
 def extract_features(input_data):
     features_array = []
     for string in input_data:
-        if isinstance(string, basestring):
+        if isinstance(string, str):
             features_array.append(get_letters_frequency(string))
         else:
             features_array.append(get_letters_frequency(" "))
@@ -75,7 +75,7 @@ def export_cleaned_data(file_name, clean_x, clean_y):
 def helper_function(input_x):
     other_chars = []
     for string in input_x:
-        if isinstance(string, basestring):
+        if isinstance(string, str):
             for char in string.lower():
                 if char not in all_characters and str(char).isdigit() is False and char not in other_chars:
                     other_chars.append(char)
@@ -126,6 +126,8 @@ if __name__ == "__main__":
     if (len(sys.argv) > 2):
         model_name = sys.argv[1]
         output_kaggle = sys.argv[2]
+    else:
+        print("Arguments missing...")
     
     # PART 1 -> DATA PREPROCESSING
     data = import_preprocessed_data("cleaned/cleaned_data_final.csv")
@@ -161,6 +163,5 @@ if __name__ == "__main__":
             
         export_kaggle_results('kaggle/' + output_kaggle, 'Id','Category', y_test_results)
     
-            
     
     
