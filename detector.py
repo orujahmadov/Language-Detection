@@ -12,7 +12,12 @@ import sys
 from ast import literal_eval
 import pickle
 from sklearn.model_selection import cross_val_score
-
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.wrappers.scikit_learn import KerasClassifier   
+from sklearn.model_selection import GridSearchCV 
+    
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
 
@@ -30,7 +35,7 @@ def clean_data(input_x, y):
     cleaned_data = []
     for input_feature, label in zip(input_x, y):
         if isinstance(input_feature, str):
-            if (get_letters_count(input_feature) > 0 and get_letters_count(input_feature) < 100):
+            if (get_letters_count(input_feature) > 40 and get_letters_count(input_feature) < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
     
@@ -105,6 +110,15 @@ def preprocess_data():
     
     return preprocessed_data
 
+def build_classifier(optimizer):
+    classifier = Sequential()
+    classifier.add(Dense(units = 36, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
+    classifier.add(Dense(units = 36, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
+    classifier.compile(optimizer = optimizer, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+
+    return classifier
+
 def import_preprocessed_data(file_preprocessed_data):
     preprocessed_data = pd.read_csv(file_preprocessed_data)
     preprocessed_data.X = preprocessed_data.X.apply(literal_eval)
@@ -126,7 +140,7 @@ if __name__ == "__main__":
     data = preprocess_data()
     X = data['X']
     Y = data['Y']
-    
+    Y = keras.utils.to_categorical(Y, 5)
     # Splitting data to train set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
     
@@ -134,30 +148,32 @@ if __name__ == "__main__":
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
-
-    # PART 2 -> TRAINING
-    classifier = LogisticRegression(random_state=0)
-    #classifier.fit(X_train, y_train)
-    accuracies = cross_val_score(estimator=classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
     
-    mean = accuracies.mean()
-    variance = accuracies.std()
+    classifier = KerasClassifier(build_fn = build_classifier)
+    parameters = {'batch_size': [25, 32],
+                  'epochs': [100, 500],
+                  'optimizer': ['adam', 'rmsprop']}
     
-    score = classifier.score(X_test, y_test) * 100
+    grid_search = GridSearchCV(estimator = classifier,
+                               param_grid = parameters,
+                               scoring = 'accuracy',
+                               cv = 10)
+    grid_search = grid_search.fit(X_train, y_train)
+    best_parameters = grid_search.best_params_
+    best_accuracy = grid_search.best_score_
     
-    print("Clasifier score is " + str(score))
-    
-    #pickle.dump(classifier, open('models/logistic_reg.sav', 'wb'))
+    print("Best params" + best_parameters)
+    print("Best accuracy" + best_accuracy)
+        
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
     test_features = extract_features(test_X.tolist())
     test_features = sc.fit_transform(test_features)
-    y_test_results = classifier.predict(test_features)
+    y_test_results = np.argmax(classifier.predict(test_features), axis=1)
             
-    export_kaggle_results('kaggle/logistic_reg.csv', 'Id','Category', y_test_results)    
-        
-        
-        
+    export_kaggle_results('kaggle/neural_nets2.csv', 'Id','Category', y_test_results)
+    
+
     
     
     
