@@ -142,16 +142,15 @@ if __name__ == "__main__":
     Y = data['Y']
     Y = keras.utils.to_categorical(Y, 5)
     # Splitting data to train set and test set
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
+    #X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.1)
     
     # Feature Scaling
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
-    X_test = sc.fit_transform(X_test)
     
     classifier = build_classifier()
     
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.fit(X_train, Y, batch_size=32, epochs=100, validation_split=0.1)
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
