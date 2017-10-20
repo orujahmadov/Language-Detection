@@ -110,12 +110,12 @@ def preprocess_data():
     
     return preprocessed_data
 
-def build_classifier(optimizer):
+def build_classifier():
     classifier = Sequential()
     classifier.add(Dense(units = 36, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
     classifier.add(Dense(units = 36, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
-    classifier.compile(optimizer = optimizer, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
     return classifier
 
@@ -149,21 +149,9 @@ if __name__ == "__main__":
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
-    classifier = KerasClassifier(build_fn = build_classifier)
-    parameters = {'batch_size': [25, 32],
-                  'epochs': [100, 500],
-                  'optimizer': ['adam', 'rmsprop']}
+    classifier = build_classifier()
     
-    grid_search = GridSearchCV(estimator = classifier,
-                               param_grid = parameters,
-                               scoring = 'accuracy',
-                               cv = 10)
-    grid_search = grid_search.fit(X_train, y_train)
-    best_parameters = grid_search.best_params_
-    best_accuracy = grid_search.best_score_
-    
-    print("Best params" + best_parameters)
-    print("Best accuracy" + best_accuracy)
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
@@ -171,7 +159,7 @@ if __name__ == "__main__":
     test_features = sc.fit_transform(test_features)
     y_test_results = np.argmax(classifier.predict(test_features), axis=1)
             
-    export_kaggle_results('kaggle/neural_nets2.csv', 'Id','Category', y_test_results)
+    export_kaggle_results('kaggle/neural_nets94.csv', 'Id','Category', y_test_results)
     
 
     
