@@ -140,19 +140,27 @@ if __name__ == "__main__":
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
+    from sklearn.svm import SVC
     # PART 2 -> TRAINING
-    classifier = LogisticRegression(random_state=0)
+    classifier = SVC(kernel='poly', random_state=0)
     classifier.fit(X_train,y_train)
-    pickle.dump(classifier, open('models/' + model_name, 'wb'))
     
-    print("Clasifier score is " + str(classifier.score(X_test, y_test)))
-
-    testset_x = pd.read_csv("data/test_set_x.csv")
-    test_X = testset_x.iloc[:,1]
-    test_features = extract_features(test_X.tolist())
-    test_features = sc.fit_transform(test_features)
-    y_test_results = classifier.predict(test_features)
+    score = classifier.score(X_test, y_test) * 100
+    
+    print("Clasifier score is " + str(score))
+    
+    if score > 90:
         
-    export_kaggle_results('kaggle/' + output_kaggle, 'Id','Category', y_test_results)    
+        pickle.dump(classifier, open('models/' + model_name, 'wb'))
+        
+        testset_x = pd.read_csv("data/test_set_x.csv")
+        test_X = testset_x.iloc[:,1]
+        test_features = extract_features(test_X.tolist())
+        test_features = sc.fit_transform(test_features)
+        y_test_results = classifier.predict(test_features)
+            
+        export_kaggle_results('kaggle/' + output_kaggle, 'Id','Category', y_test_results)
+    
+            
     
     
