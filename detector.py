@@ -146,7 +146,7 @@ if __name__ == "__main__":
     
     # Feature Scaling
     sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
+    X_train = sc.fit_transform(X)
     
     classifier = build_classifier()
     
