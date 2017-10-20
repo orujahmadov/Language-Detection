@@ -11,6 +11,7 @@ import csv
 import sys
 from ast import literal_eval
 import pickle
+from sklearn.model_selection import cross_val_score
 
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
@@ -29,7 +30,7 @@ def clean_data(input_x, y):
     cleaned_data = []
     for input_feature, label in zip(input_x, y):
         if isinstance(input_feature, str):
-            if (get_letters_count(input_feature) > 40 and get_letters_count(input_feature) < 100):
+            if (get_letters_count(input_feature) > 0 and get_letters_count(input_feature) < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
     
@@ -84,7 +85,7 @@ def helper_function(input_x):
                 other_chars.append(string)
     return other_chars
 
-def preprocess_data(file_train_x, file_train_y):
+def preprocess_data():
     # Importing the dataset
     dataset_x = pd.read_csv("data/train_set_x.csv")
     X = dataset_x.iloc[:,1]
@@ -120,17 +121,9 @@ def import_preprocessed_data(file_preprocessed_data):
     
 if __name__ == "__main__":
     
-    model_name = ""
-    output_kaggle = ""
-    
-    if (len(sys.argv) > 2):
-        model_name = sys.argv[1]
-        output_kaggle = sys.argv[2]
-    else:
-        print("Arguments missing...")
     
     # PART 1 -> DATA PREPROCESSING
-    data = import_preprocessed_data("cleaned/cleaned_data_final.csv")
+    data = preprocess_data()
     X = data['X']
     Y = data['Y']
     
@@ -141,27 +134,30 @@ if __name__ == "__main__":
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
-    
-    from sklearn.svm import SVC
+
     # PART 2 -> TRAINING
-    classifier = SVC(kernel='linear', random_state=0)
-    classifier.fit(X_train,y_train)
+    classifier = LogisticRegression(random_state=0)
+    #classifier.fit(X_train, y_train)
+    accuracies = cross_val_score(estimator=classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
+    
+    mean = accuracies.mean()
+    variance = accuracies.std()
     
     score = classifier.score(X_test, y_test) * 100
     
     print("Clasifier score is " + str(score))
     
-    if score > 90:
-        
-        pickle.dump(classifier, open('models/' + model_name, 'wb'))
-        
-        testset_x = pd.read_csv("data/test_set_x.csv")
-        test_X = testset_x.iloc[:,1]
-        test_features = extract_features(test_X.tolist())
-        test_features = sc.fit_transform(test_features)
-        y_test_results = classifier.predict(test_features)
+    #pickle.dump(classifier, open('models/logistic_reg.sav', 'wb'))
+    testset_x = pd.read_csv("data/test_set_x.csv")
+    test_X = testset_x.iloc[:,1]
+    test_features = extract_features(test_X.tolist())
+    test_features = sc.fit_transform(test_features)
+    y_test_results = classifier.predict(test_features)
             
-        export_kaggle_results('kaggle/' + output_kaggle, 'Id','Category', y_test_results)
+    export_kaggle_results('kaggle/logistic_reg.csv', 'Id','Category', y_test_results)    
+        
+        
+        
     
     
     

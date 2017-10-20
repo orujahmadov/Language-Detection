@@ -55,12 +55,12 @@ if __name__ == "__main__":
     
     sc = StandardScaler()
     # load the model from disk
-    classifier = pickle.load(open(model_name, 'rb'))
+    classifier = pickle.load(open('models/svc_classifier.sav', 'rb'))
     
-    testset_x = pd.read_csv(test_set)
+    testset_x = pd.read_csv('data/test_set_x.csv')
     test_X = testset_x.iloc[:,1]
     test_features = extract_features(test_X.tolist())
     test_features = sc.fit_transform(test_features)
     y_test_results = classifier.predict(test_features)
             
-    export_kaggle_results(output_results, 'Id','Category', y_test_results)
+    export_kaggle_results('kaggle_svc_91.csv', 'Id','Category', y_test_results)
