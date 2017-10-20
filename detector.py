@@ -143,23 +143,41 @@ if __name__ == "__main__":
     X_test = sc.fit_transform(X_test)
     
     from sklearn.svm import SVC
-    # PART 2 -> TRAINING
-    classifier = SVC(kernel='poly', random_state=0)
-    classifier.fit(X_train,y_train)
+    from sklearn.model_selection import GridSearchCV
+    # PART 2 -> TRAINING    
+    search_parameters = [
+        {
+            'kernel': ['rbf'],
+            'gamma': [1e-3, 1e-4],
+            'C': [1, 10, 100, 1000]
+        },
+        {
+            'kernel': ['poly'],
+             'C': [1, 10, 100, 1000],
+             'degree': [2,3],
+             'gamma': [1e-3, 1e-4]
+        }
+    ]
+
+    svm = GridSearchCV(SVC(), search_parameters, n_jobs=-1)
+    svm.fit(X_train, y_train)
+
+    score = svm.best_score_
     
-    score = classifier.score(X_test, y_test) * 100
+    print("Best score is " + str(score))
     
-    print("Clasifier score is " + str(score))
+    for params, mean_score, scores in zip(svm.cv_results_["params"], svm.cv_results_["mean_test_score"],  svm.cv_results_["std_test_score"]):
+        print("%0.3f (+/-%0.03f) for %r"%(mean_score, scores.std() / 2, params))
     
     if score > 90:
         
-        pickle.dump(classifier, open('models/' + model_name, 'wb'))
+        pickle.dump(svm, open('models/' + model_name, 'wb'))
         
         testset_x = pd.read_csv("data/test_set_x.csv")
         test_X = testset_x.iloc[:,1]
         test_features = extract_features(test_X.tolist())
         test_features = sc.fit_transform(test_features)
-        y_test_results = classifier.predict(test_features)
+        y_test_results = svm.predict(test_features)
             
         export_kaggle_results('kaggle/' + output_kaggle, 'Id','Category', y_test_results)
     
