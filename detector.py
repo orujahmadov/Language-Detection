@@ -152,7 +152,7 @@ if __name__ == "__main__":
     
     classifier = build_classifier()
     
-    classifier.fit(X_train, Y, batch_size=32, epochs=100, validation_split=0.2)
+    classifier.fit(X_train, Y, batch_size=32, epochs=100)
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
