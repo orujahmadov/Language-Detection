@@ -150,7 +150,7 @@ if __name__ == "__main__":
     
     classifier = build_classifier()
     
-    classifier.fit(X_train, Y, batch_size=32, epochs=100, validation_split=0.1)
+    classifier.fit(X_train, Y, batch_size=32, epochs=100, validation_split=0.2)
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     test_features = sc.fit_transform(test_features)
     y_test_results = np.argmax(classifier.predict(test_features), axis=1)
             
-    export_kaggle_results('kaggle/neural_nets94.csv', 'Id','Category', y_test_results)
+    export_kaggle_results('kaggle/neural_nets97.csv', 'Id','Category', y_test_results)
     
 
     
