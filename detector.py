@@ -17,7 +17,7 @@ from sklearn.preprocessing import StandardScaler
 import csv
 import sys
 from ast import literal_eval
-import pickle
+from sklearn.externals import joblib
 from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV
 
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    pickle.dump(classifier, open('models/neuralNetsAdamCategorical49.sav', 'wb'), protocol=2)
+    joblib.dump(classifier, open('models/neuralNetsAdamCategorical49.pkl', 'wb'))
     
 
     
