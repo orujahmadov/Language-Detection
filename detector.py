@@ -165,8 +165,7 @@ if __name__ == "__main__":
     
     # ADAM WITH BINARY CROSS ENTROPY
     classifier = build_classifier('adam', 'binary_crossentropy')
-    classifier.fit(X_train, y_train, batch_size=32, epochs=1)
-    classifier.save('models/neuralNetsAdamBinary49.h5')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
     
 ##    # ADAM WITH BINARY CROSS ENTROPY
 #    classifier = build_classifier('adam', 'categorical_crossentropy')
@@ -198,7 +197,8 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     #export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    test_prediction = classifier.predict(X_test)
+    test_prediction = np.argmax(classifier.predict(X_test), axis=1)
+    y_test = np.argmax(y_test, axis=1)
     cm = confusion_matrix(y_test, test_prediction) 
     print(cm)
     
