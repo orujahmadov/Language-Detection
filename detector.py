@@ -123,11 +123,11 @@ def preprocess_data():
 
 def build_classifier():
     classifier = Sequential()
-    classifier.add(Dense(units = 40, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
-    classifier.add(Dense(units = 40, kernel_initializer = 'uniform', activation = 'relu'))
-    classifier.add(Dense(units = 40, kernel_initializer = 'uniform', activation = 'relu'))
-    classifier.add(Dense(units = 40, kernel_initializer = 'uniform', activation = 'relu'))
-    classifier.add(Dense(units = 40, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     export_kaggle_results('kaggle/neuralNets.csv', 'Id','Category', y_test_results)
     
-    pickle.dump(classifier, 'models/neuralNets6Layers.sav', 'wb')
+    pickle.dump(classifier, 'models/neuralNets5Layers.sav', 'wb')
     
 
     
