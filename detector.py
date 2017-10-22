@@ -124,10 +124,10 @@ def preprocess_data():
 
 def build_classifier():
     classifier = Sequential()
-    classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
-    classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dropout(0.5))
-    classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
@@ -168,23 +168,21 @@ if __name__ == "__main__":
     # ADAM WITH BINARY CROSS ENTROPY
     classifier = build_classifier()
     classifier.fit(X_train, y_train, batch_size = 32, epochs = 100)
- 
-
-#    testset_x = pd.read_csv("data/test_set_x.csv")
-#    test_X = testset_x.iloc[:,1]
-#    test_features = extract_features(test_X.tolist())
-#    test_features = sc.fit_transform(test_features)
-#    y_test_results = np.argmax(classifier.predict(test_features), axis=1)
-    
-    # Save kaggle test results to submit to competition        
-    #export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
     test_prediction = np.argmax(classifier.predict(X_test), axis=1)
     y_test = np.argmax(y_test, axis=1)
     cm = confusion_matrix(y_test, test_prediction) 
     print(accuracy_score(y_test, test_prediction))
     print(cm)
+
+    testset_x = pd.read_csv("data/test_set_x.csv")
+    test_X = testset_x.iloc[:,1]
+    test_features = extract_features(test_X.tolist())
+    test_features = sc.fit_transform(test_features)
+    y_test_results = np.argmax(classifier.predict(test_features), axis=1)
     
+    #Save kaggle test results to submit to competition        
+    export_kaggle_results('kaggle/neuralNetsAdamCategoricalDropout37.csv', 'Id','Category', y_test_results)    
     
 
     
