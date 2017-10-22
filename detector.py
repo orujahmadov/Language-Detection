@@ -19,6 +19,7 @@ import sys
 from ast import literal_eval
 from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import confusion_metrics
 
 import keras
 from keras.models import Sequential
@@ -164,28 +165,28 @@ if __name__ == "__main__":
     
     # ADAM WITH BINARY CROSS ENTROPY
     classifier = build_classifier('adam', 'binary_crossentropy')
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.fit(X_train, y_train, batch_size=32, epochs=1)
     classifier.save('models/neuralNetsAdamBinary49.h5')
     
-#    # ADAM WITH BINARY CROSS ENTROPY
-    classifier = build_classifier('adam', 'categorical_crossentropy')
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-    classifier.save('models/neuralNetsAdamCategorical49.h5')
-#    
-#    # ADAM WITH BINARY CROSS ENTROPY
-    classifier = build_classifier('adamax', 'binary_crossentropy')
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-    classifier.save('models/neuralNetsAdamaxBinary49.h5')
-#    
-#    # ADAM WITH BINARY CROSS ENTROPY
-    classifier = build_classifier('rmsprop', 'binary_crossentropy')
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-    classifier.save('models/neuralNetsRMSBinary49.h5')
-#    
-#    # ADAM WITH BINARY CROSS ENTROPY
-    classifier = build_classifier('rmsprop', 'categorical_crossentropy')
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-    classifier.save('models/neuralNetsRMSCategorical49.h5')    
+##    # ADAM WITH BINARY CROSS ENTROPY
+#    classifier = build_classifier('adam', 'categorical_crossentropy')
+#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+#    classifier.save('models/neuralNetsAdamCategorical49.h5')
+##    
+##    # ADAM WITH BINARY CROSS ENTROPY
+#    classifier = build_classifier('adamax', 'binary_crossentropy')
+#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+#    classifier.save('models/neuralNetsAdamaxBinary49.h5')
+##    
+##    # ADAM WITH BINARY CROSS ENTROPY
+#    classifier = build_classifier('rmsprop', 'binary_crossentropy')
+#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+#    classifier.save('models/neuralNetsRMSBinary49.h5')
+##    
+##    # ADAM WITH BINARY CROSS ENTROPY
+#    classifier = build_classifier('rmsprop', 'categorical_crossentropy')
+#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+#    classifier.save('models/neuralNetsRMSCategorical49.h5')    
 
 
 #    testset_x = pd.read_csv("data/test_set_x.csv")
@@ -196,6 +197,10 @@ if __name__ == "__main__":
     
     # Save kaggle test results to submit to competition        
     #export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
+    
+    test_prediction = classifier.predict(X_test)
+    cm = confusion_matrix(y_test, test_prediction) 
+    print(cm)
     
     
 
