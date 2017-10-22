@@ -164,7 +164,7 @@ if __name__ == "__main__":
     X_test = sc.fit_transform(X_test)
     
     classifier = build_classifier()
-    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.fit(X_train, y_train, batch_size=32, epochs=1)
     
     print(classifier.evaluate(X_test, y_test))
         
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    pickle.dump(classifier, 'models/neuralNetsAdamCategorical49.sav', protocol=2)
+    pickle.dump(classifier, 'models/neuralNetsAdamCategorical49.sav', 'w')
     
 
     
