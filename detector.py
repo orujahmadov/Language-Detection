@@ -127,7 +127,7 @@ def build_classifier():
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
-    classifier.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
     return classifier
 
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     Y = keras.utils.to_categorical(Y, 5)
     
     # Splitting data to train set and test set
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.1)
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
     
     # Feature Scaling
     sc = StandardScaler()
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    pickle.dump(classifier, 'models/neuralNetsAdamCategorical49.sav', 'w', protocol=2)
+    pickle.dump(classifier, 'models/neuralNetsAdamCategorical49.sav', protocol=2)
     
 
     
