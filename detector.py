@@ -19,7 +19,7 @@ import sys
 from ast import literal_eval
 from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import confusion_metrics
+from sklearn.metrics import confusion_metrix
 
 import keras
 from keras.models import Sequential
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     #export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
     test_prediction = classifier.predict(X_test)
-    cm = confusion_matrix(y_test, test_prediction) 
+    cm = confusion_metrix(y_test, test_prediction) 
     print(cm)
     
     
