@@ -201,7 +201,7 @@ if __name__ == "__main__":
     test_prediction = np.argmax(classifier.predict(X_test), axis=1)
     y_test = np.argmax(y_test, axis=1)
     cm = confusion_matrix(y_test, test_prediction) 
-    accuracy_score(y_test, test_prediction)
+    print(accuracy_score(y_test, test_prediction))
     print(cm)
     
     
