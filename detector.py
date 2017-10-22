@@ -168,24 +168,24 @@ if __name__ == "__main__":
     classifier.save('models/neuralNetsAdamBinary49.h5')
     
 #    # ADAM WITH BINARY CROSS ENTROPY
-#    classifier = build_classifier('adam', 'categorical_crossentropy')
-#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-#    classifier.save('models/neuralNetsAdamCategorical49.h5')
+    classifier = build_classifier('adam', 'categorical_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsAdamCategorical49.h5')
 #    
 #    # ADAM WITH BINARY CROSS ENTROPY
-#    classifier = build_classifier('adamax', 'binary_crossentropy')
-#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-#    classifier.save('models/neuralNetsAdamaxBinary49.h5')
+    classifier = build_classifier('adamax', 'binary_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsAdamaxBinary49.h5')
 #    
 #    # ADAM WITH BINARY CROSS ENTROPY
-#    classifier = build_classifier('rms_prop', 'binary_crossentropy')
-#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-#    classifier.save('models/neuralNetsRMSBinary49.h5')
+    classifier = build_classifier('rmsprop', 'binary_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsRMSBinary49.h5')
 #    
 #    # ADAM WITH BINARY CROSS ENTROPY
-#    classifier = build_classifier('rms_prop', 'categorical_crossentropy')
-#    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
-#    classifier.save('models/neuralNetsRMSCategorical49.h5')    
+    classifier = build_classifier('rmsprop', 'categorical_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsRMSCategorical49.h5')    
 
 
 #    testset_x = pd.read_csv("data/test_set_x.csv")
