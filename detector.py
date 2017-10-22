@@ -155,7 +155,7 @@ if __name__ == "__main__":
     export_kaggle_results('kaggle/linearLR.csv', 'Id','Category', y_test_results)
     
     # Save model for further analysis
-    pickle.dump(classifier, open("logisticLR.sav", 'wb'))
+    pickle.dump(classifier, open("models/logisticLR.sav", 'wb'))
     
 
     
