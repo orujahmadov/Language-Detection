@@ -165,6 +165,8 @@ if __name__ == "__main__":
     
     classifier = build_classifier()
     classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    
+    print(classifier.evaluate(X_test, y_test))
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
