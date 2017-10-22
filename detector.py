@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 21 21:17:57 2017
+
+@author: orujahmadov
+"""
+
+# -*- coding: utf-8 -*-
 # Classification template
 
 # Importing the libraries
@@ -11,15 +18,10 @@ import csv
 import sys
 from ast import literal_eval
 import pickle
-from sklearn.model_selection import cross_val_score
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.wrappers.scikit_learn import KerasClassifier   
+from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV 
     
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
-
 
 def get_letters_count(string):
     counter = 0
@@ -33,12 +35,17 @@ def clean_data(input_x, y):
     cleaned_inputs = []
     cleaned_labels = []
     cleaned_data = []
+    empty_txt = 0
+    character_less = 0
     for input_feature, label in zip(input_x, y):
         if isinstance(input_feature, str):
-            if (get_letters_count(input_feature) > 40 and get_letters_count(input_feature) < 100):
+            count_of_letters = get_letters_count(input_feature)
+            if (count_of_letters > 10 and count_of_letters < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
-    
+        else:
+            empty_txt+=1
+
     cleaned_data.append(cleaned_inputs)
     cleaned_data.append(cleaned_labels)
     
@@ -142,16 +149,18 @@ if __name__ == "__main__":
     data = preprocess_data()
     X = data['X']
     Y = data['Y']
+    # Convert categorical data 
     Y = keras.utils.to_categorical(Y, 5)
+    
     # Splitting data to train set and test set
-    #X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.1)
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
     
     # Feature Scaling
     sc = StandardScaler()
-    X_train = sc.fit_transform(X)
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.fit_transform(X_test)
     
     classifier = build_classifier()
-    
     classifier.fit(X_train, Y, batch_size=32, epochs=100)
         
     testset_x = pd.read_csv("data/test_set_x.csv")
@@ -159,8 +168,11 @@ if __name__ == "__main__":
     test_features = extract_features(test_X.tolist())
     test_features = sc.fit_transform(test_features)
     y_test_results = np.argmax(classifier.predict(test_features), axis=1)
-            
-    export_kaggle_results('kaggle/neural_nets97.csv', 'Id','Category', y_test_results)
+    
+    # Save kaggle test results to submit to competition        
+    export_kaggle_results('kaggle/neuralNets.csv', 'Id','Category', y_test_results)
+    
+    pickle.dump(classifier, 'models/neuralNets.sav', 'wb')
     
 
     
