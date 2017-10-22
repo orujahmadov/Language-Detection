@@ -177,7 +177,7 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    pickle.dump(classifier, 'models/neuralNetsAdamCategorical49.sav', protocol=2)
+    pickle.dump(classifier, open('models/neuralNetsAdamCategorical49.sav', protocol=2))
     
 
     
