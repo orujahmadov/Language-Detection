@@ -40,7 +40,7 @@ def clean_data(input_x, y):
     for input_feature, label in zip(input_x, y):
         if isinstance(input_feature, str):
             count_of_letters = get_letters_count(input_feature)
-            if (count_of_letters > 10 and count_of_letters < 100):
+            if (count_of_letters > 20 and count_of_letters < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
         else:
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     
     
     # PART 1 -> DATA PREPROCESSING
-    data = preprocess_data()
+    data = import_preprocessed_data('cleaned/cleaned_10-100.csv')
     X = data['X']
     Y = data['Y']
     # Convert categorical data 
