@@ -176,7 +176,7 @@ if __name__ == "__main__":
     # Save kaggle test results to submit to competition        
     export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    classifier.save('models/neuralNetsAdamCategorical49.h5)
+    classifier.save('models/neuralNetsAdamCategorical49.h5')
     
 
     
