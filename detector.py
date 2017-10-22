@@ -20,6 +20,7 @@ from ast import literal_eval
 from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 
 import keras
 from keras.models import Sequential
@@ -200,6 +201,7 @@ if __name__ == "__main__":
     test_prediction = np.argmax(classifier.predict(X_test), axis=1)
     y_test = np.argmax(y_test, axis=1)
     cm = confusion_matrix(y_test, test_prediction) 
+    accuracy_score(y_test, test_prediction)
     print(cm)
     
     
