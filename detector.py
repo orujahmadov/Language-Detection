@@ -33,11 +33,26 @@ def clean_data(input_x, y):
     cleaned_inputs = []
     cleaned_labels = []
     cleaned_data = []
+    UPPER_BOUNDARY = 0
+    LOWER_BOUNDARY = 0
+    EMPTY = 0
     for input_feature, label in zip(input_x, y):
         if isinstance(input_feature, str):
-            if (get_letters_count(input_feature) > 40 and get_letters_count(input_feature) < 100):
+            letters_count = get_letters_count(input_feature)
+            if (letters_count > 40 and letters_count < 100):
                 cleaned_inputs.append(input_feature) 
                 cleaned_labels.append(label)
+            else:
+                if (letters_count >= 100):
+                    UPPER_BOUNDARY+=1
+                elif(letters_count <= 40):
+                    LOWER_BOUNDARY+=1
+        else:
+            EMPTY+=1
+    
+    print("UPPER BOUNDARYS IS" + str(UPPER_BOUNDARY))
+    print("LOWER BOUNDARYS IS" + str(LOWER_BOUNDARY))
+    print("EMPTY  IS" + str(EMPTY))
     
     cleaned_data.append(cleaned_inputs)
     cleaned_data.append(cleaned_labels)
@@ -150,8 +165,11 @@ if __name__ == "__main__":
     sc = StandardScaler()
     X_train = sc.fit_transform(X)
     
-    classifier = build_classifier()
+    classifier = SVC()
+    classifier.fit(X_train, Y)
+    accuracies = cross_val_score
     
+    classifier = build_classifier()
     classifier.fit(X_train, Y, batch_size=32, epochs=100)
         
     testset_x = pd.read_csv("data/test_set_x.csv")
