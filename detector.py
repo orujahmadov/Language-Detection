@@ -2,17 +2,14 @@
 # Classification template
 
 # Importing the libraries
-import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import csv
-import sys
 from ast import literal_eval
-import pickle
-from sklearn.model_selection import cross_val_score  
-from sklearn.model_selection import GridSearchCV 
+import seaborn
+from sklearn import metrics 
     
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
@@ -128,7 +125,7 @@ if __name__ == "__main__":
     
     
     # PART 1 -> DATA PREPROCESSING
-    data = preprocess_data()
+    data = import_preprocessed_data()
     X = data['X']
     Y = data['Y']
     
@@ -154,8 +151,6 @@ if __name__ == "__main__":
     # Export Kaggle test results to submit to competition        
     export_kaggle_results('kaggle/linearLR.csv', 'Id','Category', y_test_results)
     
-    # Save model for further analysis
-    pickle.dump(classifier, open("models/logisticLR.sav", 'wb'))
     
 
     
