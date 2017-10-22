@@ -19,7 +19,11 @@ import sys
 from ast import literal_eval
 import pickle
 from sklearn.model_selection import cross_val_score  
-from sklearn.model_selection import GridSearchCV 
+from sklearn.model_selection import GridSearchCV
+
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
     
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
