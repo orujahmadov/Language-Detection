@@ -141,7 +141,8 @@ if __name__ == "__main__":
     classifier.fit(X_train, y_train)
     
     classifier.score(X_test, y_test)
-    cm = metrics.confusion_matrix(X_test, y_test)
+    cm = metrics.confusion_matrix(y_test, classifier.predict(X_test))
+    roc_curve = metrics.roc_curve()
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
