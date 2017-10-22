@@ -120,13 +120,13 @@ def preprocess_data():
     
     return preprocessed_data
 
-def build_classifier():
+def build_classifier(optimizer, loss_function):
     classifier = Sequential()
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
-    classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+    classifier.compile(optimizer = optimizer, loss = loss_function, metrics = ['accuracy'])
 
     return classifier
 
@@ -162,21 +162,39 @@ if __name__ == "__main__":
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
-    classifier = build_classifier()
-    classifier.fit(X_train, y_train, batch_size=32, epochs=1)
+    # ADAM WITH BINARY CROSS ENTROPY
+    classifier = build_classifier('adam', 'binary_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsAdamBinary49.h5')
     
-    print(classifier.evaluate(X_test, y_test))
-        
-    testset_x = pd.read_csv("data/test_set_x.csv")
-    test_X = testset_x.iloc[:,1]
-    test_features = extract_features(test_X.tolist())
-    test_features = sc.fit_transform(test_features)
-    y_test_results = np.argmax(classifier.predict(test_features), axis=1)
+    # ADAM WITH BINARY CROSS ENTROPY
+    classifier = build_classifier('adam', 'categorical_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsAdamCategorical49.h5')
+    
+    # ADAM WITH BINARY CROSS ENTROPY
+    classifier = build_classifier('adamax', 'binary_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsAdamaxBinary49.h5')
+    
+    # ADAM WITH BINARY CROSS ENTROPY
+    classifier = build_classifier('rms_prop', 'binary_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsRMSBinary49.h5')
+    
+    # ADAM WITH BINARY CROSS ENTROPY
+    classifier = build_classifier('rms_prop', 'categorical_crossentropy')
+    classifier.fit(X_train, y_train, batch_size=32, epochs=100)
+    classifier.save('models/neuralNetsRMSCategorical49.h5')    
+#    testset_x = pd.read_csv("data/test_set_x.csv")
+#    test_X = testset_x.iloc[:,1]
+#    test_features = extract_features(test_X.tolist())
+#    test_features = sc.fit_transform(test_features)
+#    y_test_results = np.argmax(classifier.predict(test_features), axis=1)
     
     # Save kaggle test results to submit to competition        
-    export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
+    #export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    classifier.save('models/neuralNetsAdamCategorical49.h5')
     
 
     
