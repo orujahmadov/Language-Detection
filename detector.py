@@ -173,9 +173,9 @@ if __name__ == "__main__":
     y_test_results = np.argmax(classifier.predict(test_features), axis=1)
     
     # Save kaggle test results to submit to competition        
-    export_kaggle_results('kaggle/neuralNets.csv', 'Id','Category', y_test_results)
+    export_kaggle_results('kaggle/neuralNetsAdamCategorical49.csv', 'Id','Category', y_test_results)
     
-    pickle.dump(classifier, 'models/neuralNets5Layers.sav', 'wb')
+    pickle.dump(classifier, 'models/neuralNetsAdamCategorical49.sav', 'w', protocol=2)
     
 
     
