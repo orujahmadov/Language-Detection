@@ -24,7 +24,7 @@ from sklearn.metrics import accuracy_score
 
 import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
     
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
@@ -126,6 +126,7 @@ def build_classifier():
     classifier = Sequential()
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dropout(0.5))
     classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
@@ -165,12 +166,9 @@ if __name__ == "__main__":
     X_test = sc.fit_transform(X_test)
     
     # ADAM WITH BINARY CROSS ENTROPY
-    from keras.wrappers.scikit_learn import KerasClassifier
-    classifier = KerasClassifier(build_fn = build_classifier, batch_size = 32, epochs = 100)
-    accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10, n_jobs = -1)
-    print(accuracies)
-    mean = accuracies.mean()
-    variance = accuracies.std()  
+    classifier = build_classifier()
+    classifier.fit(X_train, y_train, batch_size = 32, epochs = 100)
+ 
 
 #    testset_x = pd.read_csv("data/test_set_x.csv")
 #    test_X = testset_x.iloc[:,1]
