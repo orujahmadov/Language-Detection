@@ -125,7 +125,7 @@ if __name__ == "__main__":
     
     
     # PART 1 -> DATA PREPROCESSING
-    data = import_preprocessed_data()
+    data = import_preprocessed_data('cleaned/cleaned_10-100.csv')
     X = data['X']
     Y = data['Y']
     
