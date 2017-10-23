@@ -127,7 +127,6 @@ def build_classifier():
     classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
     classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dropout(0.5))
-    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
