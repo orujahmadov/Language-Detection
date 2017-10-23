@@ -19,8 +19,7 @@ import sys
 from ast import literal_eval
 from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
+from sklearn.metrics
 
 import keras
 from keras.models import Sequential
@@ -124,8 +123,8 @@ def preprocess_data():
 
 def build_classifier():
     classifier = Sequential()
-    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
-    classifier.add(Dense(units = 37, kernel_initializer = 'uniform', activation = 'relu'))
+    classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu', input_dim = 69))
+    classifier.add(Dense(units = 49, kernel_initializer = 'uniform', activation = 'relu'))
     classifier.add(Dropout(0.5))
     classifier.add(Dense(units = 5, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
@@ -170,9 +169,14 @@ if __name__ == "__main__":
     
     test_prediction = np.argmax(classifier.predict(X_test), axis=1)
     y_test = np.argmax(y_test, axis=1)
-    cm = confusion_matrix(y_test, test_prediction) 
-    print(accuracy_score(y_test, test_prediction))
+    cm = metrics.confusion_matrix(y_test, test_prediction) 
+    print("Accuracy is " +str(metrics.accuracy_score(y_test, test_prediction)))
     print(cm)
+    recall = metrics.recall_score(y_test, test_prediction, average='macro')
+    precision = metrics.precision_score(y_test, test_prediction, average='macro')
+
+    print("recall is " + str(recall))
+    print("precision is " + str(precision))
 
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
@@ -181,7 +185,7 @@ if __name__ == "__main__":
     y_test_results = np.argmax(classifier.predict(test_features), axis=1)
     
     #Save kaggle test results to submit to competition        
-    export_kaggle_results('kaggle/neuralNetsAdamCategoricalDropout37.csv', 'Id','Category', y_test_results)    
+    export_kaggle_results('kaggle/neuralNetsAdamCategoricalDropout49.csv', 'Id','Category', y_test_results)    
     
 
     
