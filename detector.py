@@ -144,11 +144,12 @@ if __name__ == "__main__":
     
     # Feature Scaling
     sc = StandardScaler()
-    X_train = sc.fit_transform(X)
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.fit_transform(X_test)
     
     classifier = DecisionTreeClassifier()
     
-    classifier.fit(X_train, Y)
+    classifier.fit(X_train, y_train)
     
     classifier.score(X_test, y_test)
     
