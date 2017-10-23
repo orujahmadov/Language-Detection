@@ -165,7 +165,7 @@ if __name__ == "__main__":
     
     # ADAM WITH BINARY CROSS ENTROPY
     classifier = build_classifier()
-    hist = classifier.fit(X, Y, batch_size = 400, epochs = 20, validation_split = 0.2)
+    hist = classifier.fit(X, Y, batch_size = 20, epochs = 20, validation_split = 0.2)
 
 
     print(hist.history)  
