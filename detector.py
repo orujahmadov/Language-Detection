@@ -19,7 +19,7 @@ import sys
 from ast import literal_eval
 from sklearn.model_selection import cross_val_score  
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics
+from sklearn import metrics
 
 import keras
 from keras.models import Sequential
