@@ -140,9 +140,14 @@ if __name__ == "__main__":
     classifier = LogisticRegression()
     classifier.fit(X_train, y_train)
     
-    classifier.score(X_test, y_test)
+    accuracy = classifier.score(X_test, y_test)
     cm = metrics.confusion_matrix(y_test, classifier.predict(X_test))
-    roc_curve = metrics.roc_curve()
+    recall = metrics.recall_score(y_test, classifier.predict(X_test), average='macro')
+    precision = metrics.precision_score(y_test, classifier.predict(X_test), average='macro')
+    
+    print("accuracy is " + str(accuracy))
+    print("recall is " + str(recall))
+    print("precision is " + str(precision))
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
