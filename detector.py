@@ -12,6 +12,7 @@ import sys
 from ast import literal_eval
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
+from sklearn import metrics
 
     
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
@@ -135,7 +136,7 @@ if __name__ == "__main__":
     
     
     # PART 1 -> DATA PREPROCESSING
-    data = import_preprocessed_data()
+    data = import_preprocessed_data('cleaned/cleaned_10-100.csv')
     X = data['X']
     Y = data['Y']
     
@@ -154,6 +155,9 @@ if __name__ == "__main__":
     classifier.score(X_test, y_test)
     
     cm = confusion_matrix(y_test, classifier.predict(X_test))
+    
+    precision = metrics.precision_score(y_test, classifier.predict(X_test), average='macro')
+    recall = metrics.recall_score(y_test, classifier.predict(X_test), average='macro')
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
