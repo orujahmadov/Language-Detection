@@ -4,19 +4,15 @@
 # Importing the libraries
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import csv
 import sys
 from ast import literal_eval
-import pickle
 from sklearn.model_selection import cross_val_score
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.wrappers.scikit_learn import KerasClassifier   
-from sklearn.model_selection import GridSearchCV 
+from sklearn.metrics import confusion_matrix
+
     
 all_characters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','à','â','œ','ç','è','é','ê','ë','î','ô','ù','û','ä','ö','ß','ü','á','í','ñ','ó','ú','ą','ć','ę','ł','ń','ś','ź','ż','ž','š','č','¿','¡', '\'','ď','ľ','ĺ','ň','ŕ','ť','ý','ï']      
 
@@ -139,20 +135,24 @@ if __name__ == "__main__":
     
     
     # PART 1 -> DATA PREPROCESSING
-    data = preprocess_data()
+    data = import_preprocessed_data()
     X = data['X']
     Y = data['Y']
-    Y = keras.utils.to_categorical(Y, 5)
-    # Splitting data to train set and test set
-    #X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.1)
+    
+    #Splitting data to train set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
     
     # Feature Scaling
     sc = StandardScaler()
     X_train = sc.fit_transform(X)
     
-    classifier = build_classifier()
+    classifier = DecisionTreeClassifier()
     
-    classifier.fit(X_train, Y, batch_size=32, epochs=100)
+    classifier.fit(X_train, Y)
+    
+    classifier.score(X_test, y_test)
+    
+    cm = confusion_matrix(y_test, classifier.predict(X_test))
         
     testset_x = pd.read_csv("data/test_set_x.csv")
     test_X = testset_x.iloc[:,1]
