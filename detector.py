@@ -156,36 +156,19 @@ if __name__ == "__main__":
     Y = keras.utils.to_categorical(Y, 5)
     
     # Splitting data to train set and test set
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.2)
+    #X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0, test_size=0.1)
     
     # Feature Scaling
     sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.fit_transform(X_test)
+    X = sc.fit_transform(X)
+    Y = sc.fit_transform(Y)
     
     # ADAM WITH BINARY CROSS ENTROPY
     classifier = build_classifier()
-    classifier.fit(X_train, y_train, batch_size = 32, epochs = 100)
-    
-    test_prediction = np.argmax(classifier.predict(X_test), axis=1)
-    y_test = np.argmax(y_test, axis=1)
-    cm = metrics.confusion_matrix(y_test, test_prediction) 
-    print("Accuracy is " +str(metrics.accuracy_score(y_test, test_prediction)))
-    print(cm)
-    recall = metrics.recall_score(y_test, test_prediction, average='macro')
-    precision = metrics.precision_score(y_test, test_prediction, average='macro')
+    hist = classifier.fit(X, Y, batch_size = 32, epochs = 20, validation_split = 0.2)
 
-    print("recall is " + str(recall))
-    print("precision is " + str(precision))
 
-    testset_x = pd.read_csv("data/test_set_x.csv")
-    test_X = testset_x.iloc[:,1]
-    test_features = extract_features(test_X.tolist())
-    test_features = sc.fit_transform(test_features)
-    y_test_results = np.argmax(classifier.predict(test_features), axis=1)
-    
-    #Save kaggle test results to submit to competition        
-    export_kaggle_results('kaggle/neuralNetsAdamCategoricalDropout49.csv', 'Id','Category', y_test_results)    
+    print(hist.history)  
     
 
     
