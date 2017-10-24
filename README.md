@@ -16,26 +16,35 @@ Following Machine Learning models used:
 2) Non-linear: Decision Trees
 3) Artificial Neural Networks
 
-To train the first two model, run the following command:
+There are 3 main components. Preprocessing, Training and Prediction.
 
-python main.py   path/../train_set_x.csv   path/../train_set_y.csv   path/../model_name.sav
+To preproces data, run the following command:
 
-Where:
+python preprocess.py   path/../train_set_x.csv   path/../train_set_y.csv   path/../preprocessed.csv
 
 path/../train_set_x.csv is path to train X csv file.
 
 path/../train_set_y.csv is path to train Y csv file.
+
+path/../preprocessed.csv is path to save preprocessed file.
+
+
+To train the first two model, run the following command:
+
+python main.py   path/../preprocessed.csv   path/../model_name.sav
+
+Where:
+
+path/../preprocessed.csv is path to preprocessed file.
 
 path/../model_name.sav is path to save model to.
 
 
 To train the neural networks, run the following command:
 
-python main.py   path/../train_set_x.csv   path/../train_set_y.csv   path/../model_name.h5
+python main.py   path/../preprocessed.csv   path/../model_name.h5
 
-path/../train_set_x.csv is path to train X csv file.
-
-path/../train_set_y.csv is path to train Y csv file.
+path/../preprocessed.csv is path to preprocessed file.
 
 path/../model_name.h5 is path to save model to.
 
