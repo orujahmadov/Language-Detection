@@ -44,11 +44,12 @@ path/../model_name.sav is path to save model to.
 
 - To make prediction using the generated models, run the following command:
 
-python predictor.py   path/../model_name   path/../input_file.csv   path/../output_file.csv
+python predictor.py   path/../model_name   path/../input_file.csv   path/../output_file.csv {ann or lr or dt}
 
 path/../model_name.sav is path to load model from.
 
 path/../input_file.csv is path to save input file to make predictions for.
 
 path/../output_file.csv is path to save output results to.
+{ann or lr or dt} is model name selected
 
