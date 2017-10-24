@@ -27,7 +27,7 @@ path/../train_set_x.csv is path to train X csv file.
 path/../train_set_y.csv is path to train Y csv file.
 
 path/../preprocessed.csv is path to save preprocessed file.
-
+-- NOTICE: cleaned folder already contains one preprocessed csv file.
 
 - To train the model, run the following command:
 
