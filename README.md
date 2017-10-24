@@ -17,15 +17,26 @@ Following Machine Learning models used:
 
 To train the first two model, run the following command:
 
-python main.py train_set_x.csv train_set_y.csv model_name.sav
+python main.py path/../train_set_x.csv path/../train_set_y.csv path/../model_name.sav
+
+Where:
+path/../train_set_x.csv is path to train X csv file.
+path/../train_set_y.csv is path to train Y csv file.
+path/../model_name.sav is path to save model to.
 
 To train the neural networks, run the following command:
 
-python main.py train_set_x.csv train_set_y.csv model_name.h5
-
+python main.py path/../train_set_x.csv path/../train_set_y.csv path/../model_name.h5
+path/../train_set_x.csv is path to train X csv file.
+path/../train_set_y.csv is path to train Y csv file.
+path/../model_name.h5 is path to save model to.
 
 To make prediction using first two model, run the following command:
-python predictor model_name.sav output_file.csv
+python predictor path/../model_name.sav path/../output_file.csv
+path/../model_name.sav is path to load model from.
+path/../output_file.csv is path to save output results to.
 
 To make prediction using neural networks, run the following command:
-python predictor model_name.h5 output_file.csv
+python predictor path/../model_name.h5 path/../output_file.csv
+path/../model_name.h5 is path to load model from.
+path/../output_file.csv is path to save output results to.
