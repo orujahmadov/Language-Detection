@@ -18,7 +18,7 @@ Following Machine Learning models used:
 
 There are 3 main components. Preprocessing, Training and Prediction.
 
-To preproces data, run the following command:
+- To preproces data, run the following command:
 
 python preprocess.py   path/../train_set_x.csv   path/../train_set_y.csv   path/../preprocessed.csv
 
@@ -29,7 +29,7 @@ path/../train_set_y.csv is path to train Y csv file.
 path/../preprocessed.csv is path to save preprocessed file.
 
 
-To train the model, run the following command:
+- To train the model, run the following command:
 
 python {ann.py or decision_tree.py or logistic_regression.py}   path/../preprocessed.csv   path/../model_name
 
@@ -38,10 +38,10 @@ Where:
 path/../preprocessed.csv is path to preprocessed file.
 
 path/../model_name.sav is path to save model to.
+NOTICE: for Neural networks, model extension should be .h5 and for other it should be .sav
 
 
-
-To make prediction using the generated models, run the following command:
+- To make prediction using the generated models, run the following command:
 
 python predictor.py   path/../model_name   path/../input_file.csv   path/../output_file.csv
 
