@@ -38,7 +38,8 @@ Where:
 path/../preprocessed.csv is path to preprocessed file.
 
 path/../model_name.sav is path to save model to.
-NOTICE: for Neural networks, model extension should be .h5 and for other it should be .sav
+
+---NOTICE: for Neural networks, model extension should be .h5 and for other it should be .sav
 
 
 - To make prediction using the generated models, run the following command:
