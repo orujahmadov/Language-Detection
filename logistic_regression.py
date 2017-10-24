@@ -41,15 +41,15 @@ class LogisticRegression(object):
     def __init__(self, X = None, Y = None, learning_rate = 0.005):
         self.X = X
         self.Y = Y
-        self.W = Y.zeros((n_in, n_out))         # initialize W 0
-        self.b = np.zeros(Y.shape())          # initialize bias 0
+        self.W = np.zeros((5,69))        # initialize W 0
+        self.b = np.zeros((5,1))         # initialize bias 0
 
         # self.params = [self.W, self.b]
         
     def sigmoid(self, scores):
         return 1 / (1 + np.exp(-scores))
 
-    def train(self, features, target, num_steps, learning_rate, add_intercept = False):
+    def train(self, features, target, num_steps, learning_rate, add_intercept = False): 
         if add_intercept:
             intercept = np.ones((features.shape[0], 1))
             features = np.hstack((intercept, features))
@@ -96,14 +96,14 @@ class LogisticRegression(object):
     
 if __name__ == "__main__":
 
-    if (len(sys.argv) <3):
+    if (len(sys.argv) < 3):
         print("Arguments missing")
     else:
         processed_data = sys.argv[1]
         output_model = sys.argv[2]
         
         # PART 1 -> Importing Preprocessed data
-        data = import_preprocessed_data(processed_data)
+        data = import_preprocessed_data('cleaned/cleaned_Final.csv')
         X = data['X']
         Y = data['Y']
         
@@ -121,6 +121,7 @@ if __name__ == "__main__":
         print("Accuracy score is " + str(accuracy))
         # Save model to specified file
         pickle.dump(classifier, open(output_model, 'wb'))
+
         
         
 
