@@ -29,9 +29,9 @@ path/../train_set_y.csv is path to train Y csv file.
 path/../preprocessed.csv is path to save preprocessed file.
 
 
-To train the first two model, run the following command:
+To train the model, run the following command:
 
-python main.py   path/../preprocessed.csv   path/../model_name.sav
+python {ann.py or decision_tree.py or logistic_regression.py}   path/../preprocessed.csv   path/../model_name
 
 Where:
 
@@ -40,28 +40,14 @@ path/../preprocessed.csv is path to preprocessed file.
 path/../model_name.sav is path to save model to.
 
 
-To train the neural networks, run the following command:
 
-python main.py   path/../preprocessed.csv   path/../model_name.h5
+To make prediction using the generated models, run the following command:
 
-path/../preprocessed.csv is path to preprocessed file.
-
-path/../model_name.h5 is path to save model to.
-
-
-To make prediction using first two model, run the following command:
-
-python predictor   path/../model_name.sav   path/../output_file.csv
+python predictor.py   path/../model_name   path/../input_file.csv   path/../output_file.csv
 
 path/../model_name.sav is path to load model from.
 
-path/../output_file.csv is path to save output results to.
-
-
-To make prediction using neural networks, run the following command:
-
-python predictor   path/../model_name.h5   path/../output_file.csv
-
-path/../model_name.h5 is path to load model from.
+path/../input_file.csv is path to save input file to make predictions for.
 
 path/../output_file.csv is path to save output results to.
+
